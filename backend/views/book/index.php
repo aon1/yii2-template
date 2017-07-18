@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\BookSearch */
@@ -12,24 +12,49 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="book-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php 
 
-    <p>
-        <?= Html::a('Create Book', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <?= GridView::widget([
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'autoXlFormat' => true,
+        'export'=>[
+            'fontAwesome'=>true,
+            'showConfirmAlert'=>false,
+            'target'=>GridView::TARGET_BLANK
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'book_id',
             'title',
             'published_at',
-            'author_id',
-
+            [
+                'attribute' => 'author.name',
+                'format' => 'text',
+                'width' => '100px',
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
+        'panel' => [
+            'heading'=>'<h3 class="panel-title"> Books </h3>',
+            'type'=>'primary',
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Create Country', ['create'], ['class' => 'btn btn-success']),
+            'footer'=> false,
+        ],
+        'toolbar' => [
+            [
+                'content'=>
+                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], [
+                        'type'=>'button', 
+                        'title'=> 'Add Book', 
+                        'class'=>'btn btn-success'
+                    ]) . ' '.
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['grid-demo'], [
+                        'class' => 'btn btn-default', 
+                        'title' => 'Reset Grid'
+                    ]),
+            ],
+            '{export}',
+        ]
     ]); ?>
 </div>
